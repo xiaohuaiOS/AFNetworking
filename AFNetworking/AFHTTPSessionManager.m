@@ -273,7 +273,37 @@
                                          failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
     NSError *serializationError = nil;
-    NSMutableURLRequest *request = [self.requestSerializer requestWithMethod:method URLString:[[NSURL URLWithString:URLString relativeToURL:self.baseURL] absoluteString] parameters:parameters error:&serializationError];
+
+
+#warning 修改AFN源码 符合公司需要
+
+    /////////////修改此处源码 start ----------------//////////////////
+
+
+    NSMutableDictionary *tempDictM = [NSMutableDictionary dictionaryWithDictionary:parameters];
+
+    if (parameters!= nil)
+    {
+        NSString *key = [parameters objectForKey:@"key"];
+        if ([key isEqualToString:@"1"])
+        {
+            [tempDictM removeObjectForKey:@"base-key"];
+            [tempDictM removeObjectForKey:@"key"];
+        }
+
+    }
+
+    NSMutableURLRequest *request = [self.requestSerializer requestWithMethod:method URLString:[[NSURL URLWithString:URLString relativeToURL:self.baseURL] absoluteString] parameters:tempDictM error:&serializationError];
+    NSString *value = [parameters objectForKey:@"base-key"];
+    if (value != nil)
+    {
+        [request setValue:value forHTTPHeaderField:@"base-key"];
+    }
+
+    NSLog(@"mutabrequest -- %@",request);
+    /////////////修改此处源码 end ----------------//////////////////
+
+
     if (serializationError) {
         if (failure) {
             dispatch_async(self.completionQueue ?: dispatch_get_main_queue(), ^{
