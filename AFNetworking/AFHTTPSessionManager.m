@@ -281,6 +281,7 @@
 
 
     NSMutableDictionary *tempDictM = [NSMutableDictionary dictionaryWithDictionary:parameters];
+    NSData *dataBody = nil;
 
     if (parameters!= nil)
     {
@@ -290,7 +291,11 @@
             [tempDictM removeObjectForKey:@"base-key"];
             [tempDictM removeObjectForKey:@"key"];
         }
-
+        
+        // **** body
+        if (parameters[@"body"]) {
+            dataBody = parameters[@"body"];
+        }
     }
 
     NSMutableURLRequest *request = [self.requestSerializer requestWithMethod:method URLString:[[NSURL URLWithString:URLString relativeToURL:self.baseURL] absoluteString] parameters:tempDictM error:&serializationError];
@@ -298,6 +303,9 @@
     if (value != nil)
     {
         [request setValue:value forHTTPHeaderField:@"base-key"];
+    }
+    if (dataBody != nil) {
+        request.HTTPBody = dataBody;
     }
 
     NSLog(@"mutabrequest -- %@",request);
