@@ -274,11 +274,9 @@
 {
     NSError *serializationError = nil;
 
-
-#warning 修改AFN源码 符合公司需要
+#pragma mark   修改AFN源码 符合公司需要
 
     /////////////修改此处源码 start ----------------//////////////////
-
 
     NSMutableDictionary *tempDictM = [NSMutableDictionary dictionaryWithDictionary:parameters];
 
@@ -299,7 +297,6 @@
         [request setValue:value forHTTPHeaderField:@"base-key"];
     }
 
-    NSLog(@"mutabrequest -- %@",request);
     /////////////修改此处源码 end ----------------//////////////////
 
 
